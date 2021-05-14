@@ -1,5 +1,5 @@
 import React from "react";
-import Tree from "./components/Tree/Tree";
+import D3 from "./components/D3";
 import "./App.css";
 
 const App = () => {
@@ -18,7 +18,7 @@ const App = () => {
         </div>
       </header>
       <main>
-        <Tree />
+        <D3 />
       </main>
     </div>
   );
