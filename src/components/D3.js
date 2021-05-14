@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import d3 from "d3";
 import data from "../data/flare.json";
 import Tree from "./Tree/Tree";
@@ -36,7 +36,13 @@ const collapseNodes = (d) => {
 collapseNodes(root.children);
 
 const D3 = () => {
-  return <Tree width={width} height={height} nodes={nodes} />;
+  const [myNodes, setNodes] = useState([]);
+
+  useEffect(() => {
+    setNodes(nodes);
+  });
+
+  return <Tree width={width} height={height} nodes={myNodes} />;
 };
 
 export default D3;

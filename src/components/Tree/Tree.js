@@ -6,11 +6,17 @@ import "./style.css";
 const Tree = ({ nodes, width, height }) => {
   return (
     <svg width={width} height={height}>
-      <g transform="translate(120,20)">
+      <g transform="translate(50, 50)">
         {nodes.map(({ parent }, i) => {
           return (
             parent && (
-              <Node key={i} x={parent.x} y={parent.y} text={parent.name} />
+              <Node
+                color={parent._children ? "rgb(176, 196, 222)" : "#fff"}
+                key={i}
+                x={parent.x}
+                y={parent.y}
+                text={parent.name}
+              />
             )
           );
         })}
