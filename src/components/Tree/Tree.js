@@ -1,13 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Node from "../Node";
+import "./style.css";
 
 const Tree = ({ nodes, width, height }) => {
   return (
     <svg width={width} height={height}>
-      {nodes.map(({ parent }, i) => {
-        return parent && <Node x={parent.x} y={parent.y} key={i} />;
-      })}
+      <g transform="translate(120,20)">
+        {nodes.map(({ parent }, i) => {
+          return (
+            parent && (
+              <Node key={i} x={parent.x} y={parent.y} text={parent.name} />
+            )
+          );
+        })}
+      </g>
     </svg>
   );
 };

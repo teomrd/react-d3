@@ -13,9 +13,27 @@ root.y0 = 0;
 
 let tree = d3.layout.tree().size([height, width]);
 let nodes = tree.nodes(root).reverse();
+// let links = tree.links(nodes);
+
 nodes.forEach(function (d) {
   d.y = d.depth * 180;
 });
+
+console.log({ nodes });
+
+const collapse = (d) => {
+  if (d.children) {
+    d._children = d.children;
+    d._children.forEach(collapse);
+    d.children = null;
+  }
+};
+
+const collapseNodes = (d) => {
+  return Array.isArray(d) ? d.forEach(collapse) : collapse(d);
+};
+
+collapseNodes(root.children);
 
 const D3 = () => {
   return <Tree width={width} height={height} nodes={nodes} />;
