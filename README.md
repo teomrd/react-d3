@@ -1,6 +1,6 @@
 # React + D3
 
-> Node graph visualization
+> Node graph visualization based on the great [Mike Bostock's block](https://bl.ocks.org/mbostock/4339083)
 
 <https://react-d3-lac.vercel.app>
 
