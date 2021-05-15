@@ -8,10 +8,9 @@ const Tree = ({ nodes, links, width, height, onNodeClick }) => {
   return (
     <svg width={width} height={height}>
       <g transform="translate(50, 50)">
-        {links.map((link, i) => {
+        {links.map((link) => {
           const { source, target } = link;
-
-          return <Link key={i} source={source} target={target} />;
+          return <Link key={target.id} source={source} target={target} />;
         })}
         {nodes.map((node) => {
           const { id, x, y, name, _children, children, ...rest } = node;
