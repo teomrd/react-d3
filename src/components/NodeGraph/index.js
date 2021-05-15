@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import d3 from "d3";
-import data from "../data/flare-2.json";
-import Tree from "./Tree/Tree";
+import data from "../../data/flare-2.json";
+import Tree from "./Tree";
 import { idify } from "./idify";
 
-const margin = { top: 20, right: 120, bottom: 20, left: 120 };
+const margin = { top: 50, right: 50, bottom: 50, left: 50 };
 const width = 960 - margin.right - margin.left;
 const height = 800 - margin.top - margin.bottom;
 const fixedDepth = 200;
@@ -16,8 +16,13 @@ let root = idify(data);
 const NodeGraph = () => {
   const [myNodes, setNodes] = useState([]);
   const [myLinks, setLinks] = useState([]);
+  const [sourcePosition, setSourcePosition] = useState({});
 
-  const update = () => {
+  const update = (source) => {
+    setSourcePosition({
+      x: source.x,
+      y: source.y,
+    });
     let nodes = tree.nodes(root).reverse();
     let links = tree.links(nodes);
 
@@ -27,11 +32,6 @@ const NodeGraph = () => {
 
     setLinks(links);
     setNodes(nodes);
-
-    nodes.forEach(function (d) {
-      d.x0 = d.x;
-      d.y0 = d.y;
-    });
   };
 
   const toggleChildren = (self) => {
@@ -42,6 +42,7 @@ const NodeGraph = () => {
       self.children = self._children;
       self._children = null;
     }
+
     update(self);
   };
 
@@ -67,6 +68,7 @@ const NodeGraph = () => {
       height={height}
       nodes={myNodes}
       links={myLinks}
+      sourcePosition={sourcePosition}
       onNodeClick={toggleChildren}
     />
   );

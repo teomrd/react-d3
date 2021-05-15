@@ -4,28 +4,35 @@ import Node from "./Node";
 import Link from "./Link";
 import "./style.css";
 
-const Tree = ({ nodes, links, width, height, onNodeClick }) => {
+const Tree = ({ nodes, links, width, height, onNodeClick, sourcePosition }) => {
   return (
     <svg width={width} height={height}>
       <g transform="translate(50, 50)">
         {links.map((link) => {
           const { source, target } = link;
-          return <Link key={target.id} source={source} target={target} />;
+          return (
+            <Link
+              key={target.id}
+              source={source}
+              target={target}
+              sourcePosition={sourcePosition}
+            />
+          );
         })}
         {nodes.map((node) => {
-          const { id, x, y, name, _children, children, ...rest } = node;
+          const { id, x, y, name, _children, children } = node;
           const isClickable = !!(_children || children);
 
           return (
             <Node
-              isClickable={isClickable}
-              color={_children ? "rgb(176, 196, 222)" : "#fff"}
               key={id}
               x={x}
               y={y}
+              sourcePosition={sourcePosition}
               text={name}
+              isClickable={isClickable}
+              color={_children ? "rgb(176, 196, 222)" : "#fff"}
               onNodeClick={() => onNodeClick(node)}
-              {...rest}
             />
           );
         })}
@@ -40,6 +47,10 @@ Tree.propTypes = {
   nodes: PropTypes.array,
   links: PropTypes.array,
   onNodeClick: PropTypes.func.isRequired,
+  sourcePosition: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
+  }).isRequired,
 };
 
 Tree.defaultProps = {

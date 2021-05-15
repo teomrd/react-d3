@@ -1,5 +1,5 @@
 import React from "react";
-import NodeGraph from "./components/NodeGraph";
+import NodeGraph from "./components/NodeGraph/index";
 import "./App.css";
 
 const App = () => {

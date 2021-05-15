@@ -7,11 +7,12 @@ let diagonal = d3.svg.diagonal().projection((d) => [d.x, d.y]);
 
 const getDiagonal = (source, target) => diagonal({ source, target });
 
-const Link = ({ source, target }) => {
-  const o = { x: source.x0, y: source.y0 };
+const Link = ({ source, target, sourcePosition }) => {
+  const { x: sx = source.x, y: sy = source.y } = sourcePosition;
+  const enterPosition = { x: sx, y: sy };
   return (
     <motion.path
-      initial={{ d: getDiagonal(o, o) }}
+      initial={{ d: getDiagonal(enterPosition, enterPosition) }}
       animate={{ d: getDiagonal(source, target) }}
       transition={{ duration: 0.75 }}
       className="link"
@@ -22,6 +23,10 @@ const Link = ({ source, target }) => {
 Link.propTypes = {
   source: PropTypes.object.isRequired,
   target: PropTypes.object.isRequired,
+  sourcePosition: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
+  }),
 };
 
 export default Link;
