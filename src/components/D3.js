@@ -7,11 +7,11 @@ const margin = { top: 20, right: 120, bottom: 20, left: 120 };
 const width = 960 - margin.right - margin.left;
 const height = 800 - margin.top - margin.bottom;
 
-const toggleChildren = (node) => ({
-  ...node,
-  children: node.children ? null : node._children,
-  _children: node.children ? node.children : null,
-});
+// const toggleChildren = (node) => ({
+//   ...node,
+//   children: node.children ? null : node._children,
+//   _children: node.children ? node.children : null,
+// });
 
 const tree = d3.layout.tree().size([height, width]);
 // let links = tree.links(nodes);
@@ -27,30 +27,36 @@ const tree = d3.layout.tree().size([height, width]);
 // };
 // collapseNodes(root.children);
 
+let root = data;
+
 const D3 = () => {
   const [myNodes, setNodes] = useState([]);
-  const [root, setRoot] = useState({
-    ...data,
-    x0: height / 2,
-    y0: 0,
-  });
 
   const update = (source) => {
+    console.log("source", source);
     let nodes = tree.nodes(root).reverse();
-    const myNodes = nodes.map((d, i) => ({
-      ...d,
-      y: d.depth * 180,
-      x0: d.x,
-      y0: d.y,
-      id: i,
-    }));
+    nodes.forEach(function (d) {
+      d.y = d.depth * 200;
+    });
 
-    setNodes(myNodes);
+    console.log("root", root);
+    setNodes(nodes);
   };
+
+  function toggleChildren(d) {
+    console.log("d", d);
+    if (d.children) {
+      d._children = d.children;
+      d.children = null;
+    } else {
+      d.children = d._children;
+      d._children = null;
+    }
+    update(d);
+  }
 
   const handleNodeClick = (d) => {
     toggleChildren(d);
-    update(d);
   };
 
   useEffect(() => {

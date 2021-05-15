@@ -17,7 +17,7 @@ const Tree = ({ nodes, width, height, onNodeClick }) => {
               x={x}
               y={y}
               text={name}
-              onNodeClick={onNodeClick}
+              onNodeClick={() => onNodeClick(node)}
             />
           );
         })}
