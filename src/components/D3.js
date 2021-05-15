@@ -16,18 +16,14 @@ const D3 = () => {
   const [myNodes, setNodes] = useState([]);
   const [myLinks, setLinks] = useState([]);
 
-  const update = (source) => {
-    // console.log("source", source);
+  const update = () => {
     let nodes = tree.nodes(root).reverse();
     let links = tree.links(nodes);
-
-    console.log("links", links);
 
     nodes.forEach(function (d) {
       d.y = d.depth * fixedDepth;
     });
 
-    // console.log("root", root);
     setLinks(links);
     setNodes(nodes);
   };
