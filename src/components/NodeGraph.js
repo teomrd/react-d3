@@ -25,13 +25,13 @@ const NodeGraph = () => {
       d.y = d.depth * fixedDepth;
     });
 
+    setLinks(links);
+    setNodes(nodes);
+
     nodes.forEach(function (d) {
       d.x0 = d.x;
       d.y0 = d.y;
     });
-
-    setLinks(links);
-    setNodes(nodes);
   };
 
   const toggleChildren = (self) => {
