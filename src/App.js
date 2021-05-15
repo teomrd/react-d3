@@ -1,6 +1,7 @@
 import React from "react";
 import NodeGraph from "./components/NodeGraph/index";
 import "./App.css";
+import SmoothySubText from "./components/SmoothySubText";
 
 const App = () => {
   return (
@@ -14,7 +15,9 @@ const App = () => {
           React + D3
         </h1>
         <div>
-          <i>are friends </i> 😈
+          <SmoothySubText>
+            <i>are friends </i> 😈
+          </SmoothySubText>
         </div>
       </header>
       <main>
