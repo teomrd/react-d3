@@ -12,7 +12,7 @@ const tree = d3.layout.tree().size([height, width]);
 
 let root = data;
 
-const D3 = () => {
+const NodeGraph = () => {
   const [myNodes, setNodes] = useState([]);
   const [myLinks, setLinks] = useState([]);
 
@@ -66,4 +66,4 @@ const D3 = () => {
   );
 };
 
-export default D3;
+export default NodeGraph;

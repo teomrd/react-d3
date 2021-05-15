@@ -1,5 +1,5 @@
 import React from "react";
-import D3 from "./components/D3";
+import NodeGraph from "./components/NodeGraph";
 import "./App.css";
 
 const App = () => {
@@ -18,7 +18,7 @@ const App = () => {
         </div>
       </header>
       <main>
-        <D3 />
+        <NodeGraph />
       </main>
     </div>
   );

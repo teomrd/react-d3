@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Node from "../Node";
-import Link from "../Link";
+import Node from "./Node";
+import Link from "./Link";
 import "./style.css";
 
 const Tree = ({ nodes, links, width, height, onNodeClick }) => {
