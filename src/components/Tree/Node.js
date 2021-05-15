@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Node = ({ x, y, r, color, text, onNodeClick }) => {
+const Node = ({ x, y, r, color, text, onNodeClick, isClickable }) => {
   return (
     <g
-      className="node"
+      className={`node ${isClickable ? "clickable" : ""}`}
       transform={`translate(${x},${y})`}
       onClick={onNodeClick}
     >
@@ -24,6 +24,7 @@ Node.propTypes = {
   color: PropTypes.string,
   text: PropTypes.string,
   onNodeClick: PropTypes.func.isRequired,
+  isClickable: PropTypes.bool,
 };
 
 Node.defaultProps = {
@@ -32,6 +33,7 @@ Node.defaultProps = {
   r: 20,
   color: "rgb(176, 196, 222)",
   text: "",
+  isClickable: false,
 };
 
 export default Node;

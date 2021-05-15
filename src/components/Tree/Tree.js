@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Children } from "react";
 import PropTypes from "prop-types";
 import Node from "./Node";
 import Link from "./Link";
@@ -14,11 +14,13 @@ const Tree = ({ nodes, links, width, height, onNodeClick }) => {
           return <Link key={i} source={source} target={target} />;
         })}
         {nodes.map((node, i) => {
-          const { x, y, name, parent } = node;
+          const { x, y, name, _children, children } = node;
+          const isClickable = _children || children;
 
           return (
             <Node
-              color={parent && parent._children ? "rgb(176, 196, 222)" : "#fff"}
+              isClickable={isClickable}
+              color={_children ? "rgb(176, 196, 222)" : "#fff"}
               key={i}
               id={i}
               x={x}
