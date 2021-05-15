@@ -19,6 +19,7 @@ const Node = ({
       onClick={onNodeClick}
       initial={{ x: sx, y: sy, scale: 0 }}
       animate={{ x, y, scale: 1 }}
+      exit={{ x: sx, y: sy, scale: 0 }}
       transition={{ duration: 0.75 }}
     >
       <circle r={r} style={{ fill: color }}></circle>
