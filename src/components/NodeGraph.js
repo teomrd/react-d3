@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import d3 from "d3";
-import data from "../data/flare.json";
+import data from "../data/flare-2.json";
 import Tree from "./Tree/Tree";
+import { idify } from "./idify";
 
 const margin = { top: 20, right: 120, bottom: 20, left: 120 };
 const width = 960 - margin.right - margin.left;
@@ -10,7 +11,7 @@ const fixedDepth = 200;
 
 const tree = d3.layout.tree().size([height, width]);
 
-let root = data;
+let root = idify(data);
 
 const NodeGraph = () => {
   const [myNodes, setNodes] = useState([]);
@@ -22,6 +23,11 @@ const NodeGraph = () => {
 
     nodes.forEach(function (d) {
       d.y = d.depth * fixedDepth;
+    });
+
+    nodes.forEach(function (d) {
+      d.x0 = d.x;
+      d.y0 = d.y;
     });
 
     setLinks(links);

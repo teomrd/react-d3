@@ -13,20 +13,20 @@ const Tree = ({ nodes, links, width, height, onNodeClick }) => {
 
           return <Link key={i} source={source} target={target} />;
         })}
-        {nodes.map((node, i) => {
-          const { x, y, name, _children, children } = node;
+        {nodes.map((node) => {
+          const { id, x, y, name, _children, children, ...rest } = node;
           const isClickable = !!(_children || children);
 
           return (
             <Node
               isClickable={isClickable}
               color={_children ? "rgb(176, 196, 222)" : "#fff"}
-              key={i}
-              id={i}
+              key={id}
               x={x}
               y={y}
               text={name}
               onNodeClick={() => onNodeClick(node)}
+              {...rest}
             />
           );
         })}
