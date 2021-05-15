@@ -15,7 +15,7 @@ const Tree = ({ nodes, links, width, height, onNodeClick }) => {
         })}
         {nodes.map((node, i) => {
           const { x, y, name, _children, children } = node;
-          const isClickable = _children || children;
+          const isClickable = !!(_children || children);
 
           return (
             <Node
