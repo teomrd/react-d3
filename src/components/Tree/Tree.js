@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import Node from "./Node";
 import Link from "./Link";
