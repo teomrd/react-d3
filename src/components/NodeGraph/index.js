@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import d3 from "d3";
 import data from "../../data/flare-2.json";
 import Tree from "./Tree";
-import { idify } from "./idify";
+import { idifyTree } from "../../utils/treeStructures";
 
 const margin = { top: 50, right: 50, bottom: 50, left: 50 };
 const width = 960 - margin.right - margin.left;
@@ -11,7 +11,7 @@ const fixedDepth = 200;
 
 const tree = d3.layout.tree().size([height, width]);
 
-let root = idify(data);
+let root = idifyTree(data);
 
 const NodeGraph = () => {
   const [myNodes, setNodes] = useState([]);

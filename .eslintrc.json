@@ -3,7 +3,8 @@
   "env": {
     "browser": true,
     "commonjs": true,
-    "es6": true
+    "es6": true,
+    "jest": true
   },
   "extends": [
     "eslint:recommended",
@@ -17,7 +18,7 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["prettier", "import", "react"],
+  "plugins": ["prettier", "import", "react", "jest"],
   "rules": {
     "no-console": "warn",
     "prettier/prettier": "error",
