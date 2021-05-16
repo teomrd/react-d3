@@ -9,20 +9,22 @@ const Tree = ({ nodes, links, width, height, onNodeClick, sourcePosition }) => {
   return (
     <svg width={width} height={height}>
       <g transform="translate(50, 50)">
-        {links.map((link) => {
-          const { source, target } = link;
-          return (
-            <Link
-              key={target.id}
-              source={source}
-              target={target}
-              sourcePosition={sourcePosition}
-            />
-          );
-        })}
+        <AnimatePresence>
+          {links.map((link) => {
+            const { source, target } = link;
+            return (
+              <Link
+                key={target.id}
+                source={source}
+                target={target}
+                sourcePosition={sourcePosition}
+              />
+            );
+          })}
+        </AnimatePresence>
         <AnimatePresence>
           {nodes.map((node) => {
-            const { id, x, y, name, _children, children } = node;
+            const { id, x, y, name, _children, children, parent } = node;
             const isClickable = !!(_children || children);
             return (
               <Node
@@ -30,6 +32,7 @@ const Tree = ({ nodes, links, width, height, onNodeClick, sourcePosition }) => {
                 x={x}
                 y={y}
                 sourcePosition={sourcePosition}
+                parent={parent}
                 text={name}
                 isClickable={isClickable}
                 color={_children ? "rgb(176, 196, 222)" : "#fff"}

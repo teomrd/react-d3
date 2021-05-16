@@ -6,6 +6,7 @@ const Node = ({
   x,
   y,
   sourcePosition,
+  parent,
   r,
   color,
   text,
@@ -13,13 +14,14 @@ const Node = ({
   isClickable,
 }) => {
   const { x: sx = x, y: sy = y } = sourcePosition;
+  const { x: px = x, y: py = y } = parent;
   return (
     <motion.g
       className={`node ${isClickable ? "clickable" : ""}`}
       onClick={onNodeClick}
       initial={{ x: sx, y: sy, scale: 0 }}
       animate={{ x, y, scale: 1 }}
-      exit={{ x: sx, y: sy, scale: 0 }}
+      exit={{ x: px, y: py, scale: 0 }}
       transition={{ duration: 0.75 }}
     >
       <circle r={r} style={{ fill: color }}></circle>
@@ -36,6 +38,10 @@ Node.propTypes = {
   x: PropTypes.number,
   y: PropTypes.number,
   sourcePosition: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
+  }).isRequired,
+  parent: PropTypes.shape({
     x: PropTypes.number,
     y: PropTypes.number,
   }).isRequired,

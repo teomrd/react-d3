@@ -13,8 +13,9 @@ const Link = ({ source, target, sourcePosition }) => {
   return (
     <motion.path
       initial={{ d: getDiagonal(enterPosition, enterPosition) }}
-      animate={{ d: getDiagonal(source, target) }}
+      animate={{ d: getDiagonal(source, target), opacity: 1 }}
       transition={{ duration: 0.75 }}
+      exit={{ d: getDiagonal(source, source), opacity: 0 }}
       className="link"
     ></motion.path>
   );
