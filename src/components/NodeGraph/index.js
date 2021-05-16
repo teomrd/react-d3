@@ -9,9 +9,30 @@ const width = 960 - margin.right - margin.left;
 const height = 800 - margin.top - margin.bottom;
 const fixedDepth = 200;
 
+const toggleChildren = (self) => {
+  if (self.children) {
+    self._children = self.children;
+    self.children = null;
+  } else {
+    self.children = self._children;
+    self._children = null;
+  }
+};
+const collapseChildrenToTheEnd = (d) => {
+  if (d.children) {
+    d._children = d.children;
+    d._children.forEach(collapseChildrenToTheEnd);
+    d.children = null;
+  }
+};
+const fullyCollapseTreeOrNodes = (d) =>
+  Array.isArray(d)
+    ? d.forEach(collapseChildrenToTheEnd)
+    : collapseChildrenToTheEnd(d);
+
 const tree = d3.layout.tree().size([height, width]);
 
-let root = idifyTree(data);
+const root = idifyTree(data);
 
 const NodeGraph = () => {
   const [myNodes, setNodes] = useState([]);
@@ -23,10 +44,10 @@ const NodeGraph = () => {
       x: source.x,
       y: source.y,
     });
-    let nodes = tree.nodes(root).reverse();
-    let links = tree.links(nodes);
+    const nodes = tree.nodes(root).reverse();
+    const links = tree.links(nodes);
 
-    nodes.forEach(function (d) {
+    nodes.forEach((d) => {
       d.y = d.depth * fixedDepth;
     });
 
@@ -34,31 +55,13 @@ const NodeGraph = () => {
     setNodes(nodes);
   };
 
-  const toggleChildren = (self) => {
-    if (self.children) {
-      self._children = self.children;
-      self.children = null;
-    } else {
-      self.children = self._children;
-      self._children = null;
-    }
-
+  const handleNodeClick = (self) => {
+    toggleChildren(self);
     update(self);
   };
 
-  const collapse = (d) => {
-    if (d.children) {
-      d._children = d.children;
-      d._children.forEach(collapse);
-      d.children = null;
-    }
-  };
-  const collapseNodes = (d) => {
-    return Array.isArray(d) ? d.forEach(collapse) : collapse(d);
-  };
-
   useEffect(() => {
-    collapseNodes(root.children);
+    fullyCollapseTreeOrNodes(root.children);
     update(root);
   }, [root]);
 
@@ -69,7 +72,7 @@ const NodeGraph = () => {
       nodes={myNodes}
       links={myLinks}
       sourcePosition={sourcePosition}
-      onNodeClick={toggleChildren}
+      onNodeClick={handleNodeClick}
     />
   );
 };
