@@ -15,3 +15,10 @@ frame-motion proved to be great for managing the animation part
 * D3: 3.5
 * framer-motion: 4.1
 * vercel
+
+## Outstanding bug 🪳
+
+The exit transition is heading towards the parent's current position and not the
+source's new position
+(_source is the Node that's being clicked and triggers
+the collapse event_).
