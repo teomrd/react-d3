@@ -25,16 +25,18 @@ const Tree = ({ nodes, links, width, height, onNodeClick, sourcePosition }) => {
         <AnimatePresence>
           {nodes.map((node) => {
             const { id, x, y, name, _children, children, parent } = node;
-            const isClickable = !!(_children || children);
+            const isParent = !!(_children || children);
             return (
               <Node
                 key={id}
-                x={x}
-                y={y}
-                sourcePosition={sourcePosition}
-                parent={parent}
+                position={{
+                  x,
+                  y,
+                }}
+                enterPosition={sourcePosition}
+                exitPosition={parent}
                 text={name}
-                isClickable={isClickable}
+                isClickable={isParent}
                 color={_children ? "rgb(176, 196, 222)" : "#fff"}
                 onNodeClick={() => onNodeClick(node)}
               />
