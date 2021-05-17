@@ -10,17 +10,9 @@ const Tree = ({ nodes, links, width, height, onNodeClick, sourcePosition }) => {
     <svg width={width} height={height}>
       <g transform="translate(50, 50)">
         <AnimatePresence>
-          {links.map((link) => {
-            const { source, target } = link;
-            return (
-              <Link
-                key={target.id}
-                source={source}
-                target={target}
-                sourcePosition={sourcePosition}
-              />
-            );
-          })}
+          {links.map(({ source, target }) => (
+            <Link key={target.id} source={source} target={target} />
+          ))}
         </AnimatePresence>
         <AnimatePresence>
           {nodes.map((node) => {
