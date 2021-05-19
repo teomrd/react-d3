@@ -2,7 +2,7 @@ import React from "react";
 import NodeGraph from "./components/NodeGraph/index";
 import "./App.css";
 import SmoothySubText from "./components/SmoothySubText";
-import data from "./data/flare-2.json";
+import data from "./data/flare.json";
 
 const App = () => {
   return (

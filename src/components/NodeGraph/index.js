@@ -31,9 +31,8 @@ const NodeGraph = ({ id, data, fixedDepth }) => {
   const [myLinks, setLinks] = useState([]);
   const [root, setRoot] = useState(idifyTree({}));
   const width = useAvailableWidth(`#${id}`);
+  const [height, setHeight] = useState(0);
   const [sourcePosition, setSourcePosition] = useState({});
-
-  const height = 800;
 
   useEffect(() => {
     const root = idifyTree(data);
@@ -47,16 +46,22 @@ const NodeGraph = ({ id, data, fixedDepth }) => {
 
   const handleNodeClick = (self) => {
     toggleChildren(self);
-    update(self);
+    setSourcePosition({
+      x: self.x,
+      y: self.y,
+    });
+    update();
   };
 
-  const update = (source) => {
-    const tree = d3.layout.tree().size([width, height]);
+  const update = () => {
+    const currentDepth = myNodes.reduce(
+      (acc, { depth }) => (depth > acc ? depth : acc),
+      0
+    );
 
-    setSourcePosition({
-      x: source.x,
-      y: source.y,
-    });
+    setHeight((currentDepth + 1) * fixedDepth + fixedDepth);
+
+    const tree = d3.layout.tree().size([width, height]);
     const nodes = tree.nodes(root).reverse();
     const links = tree.links(nodes);
 
@@ -92,7 +97,7 @@ NodeGraph.propTypes = {
 
 NodeGraph.defaultProps = {
   id: "node-graph-svg",
-  fixedDepth: 200,
+  fixedDepth: 180,
 };
 
 export default NodeGraph;
