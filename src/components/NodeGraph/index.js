@@ -4,6 +4,7 @@ import d3 from "d3";
 import data from "../../data/flare-2.json";
 import Tree from "./Tree";
 import { idifyTree } from "../../utils/treeStructures";
+import { useAvailableWidth } from "./useWindowSize";
 
 const toggleChildren = (self) => {
   if (self.children) {
@@ -28,13 +29,17 @@ const fullyCollapseTreeOrNodes = (d) =>
 
 const root = idifyTree(data);
 
-const NodeGraph = ({ width, height, fixedDepth }) => {
+const NodeGraph = ({ fixedDepth }) => {
   const [myNodes, setNodes] = useState([]);
   const [myLinks, setLinks] = useState([]);
+  const width = useAvailableWidth("#node-graph-svg");
   const [sourcePosition, setSourcePosition] = useState({});
-  const tree = d3.layout.tree().size([height, width]);
+
+  const height = 800;
 
   const update = (source) => {
+    const tree = d3.layout.tree().size([width, height]);
+
     setSourcePosition({
       x: source.x,
       y: source.y,
@@ -54,6 +59,10 @@ const NodeGraph = ({ width, height, fixedDepth }) => {
     toggleChildren(self);
     update(self);
   };
+
+  useEffect(() => {
+    update(root);
+  }, [width]);
 
   useEffect(() => {
     fullyCollapseTreeOrNodes(root.children);

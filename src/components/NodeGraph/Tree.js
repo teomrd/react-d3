@@ -5,10 +5,18 @@ import Link from "./Link";
 import "./style.css";
 import { AnimatePresence } from "framer-motion";
 
-const Tree = ({ nodes, links, width, height, onNodeClick, sourcePosition }) => {
+const Tree = ({
+  nodes,
+  links,
+  width,
+  height,
+  onNodeClick,
+  sourcePosition,
+  id,
+}) => {
   return (
-    <svg width={width} height={height}>
-      <g transform="translate(50, 50)">
+    <svg width={width} height={height} id={id}>
+      <g transform="translate(0, 50)">
         <AnimatePresence>
           {links.map(({ source, target }) => (
             <Link
@@ -46,6 +54,7 @@ const Tree = ({ nodes, links, width, height, onNodeClick, sourcePosition }) => {
 };
 
 Tree.propTypes = {
+  id: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number,
   nodes: PropTypes.array,
@@ -58,6 +67,7 @@ Tree.propTypes = {
 };
 
 Tree.defaultProps = {
+  id: "node-graph-svg",
   width: 0,
   height: 0,
   nodes: [],
