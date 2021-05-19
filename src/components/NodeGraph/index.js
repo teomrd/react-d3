@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import d3 from "d3";
-import data from "../../data/flare.json";
+import data from "../../data/flare-2.json";
 import Tree from "./Tree";
 import { idifyTree } from "../../utils/treeStructures";
 

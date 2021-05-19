@@ -11,7 +11,12 @@ const Tree = ({ nodes, links, width, height, onNodeClick, sourcePosition }) => {
       <g transform="translate(50, 50)">
         <AnimatePresence>
           {links.map(({ source, target }) => (
-            <Link key={target.id} source={source} target={target} />
+            <Link
+              key={target.id}
+              source={source}
+              target={target}
+              sourcePosition={sourcePosition}
+            />
           ))}
         </AnimatePresence>
         <AnimatePresence>
