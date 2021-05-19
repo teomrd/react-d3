@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import d3 from "d3";
-import data from "../../data/flare-2.json";
 import Tree from "./Tree";
 import { idifyTree } from "../../utils/treeStructures";
 import { useAvailableWidth } from "./useAvailableWidth";
@@ -27,15 +26,29 @@ const fullyCollapseTreeOrNodes = (d) =>
     ? d.forEach(collapseChildrenToTheEnd)
     : collapseChildrenToTheEnd(d);
 
-const root = idifyTree(data);
-
-const NodeGraph = ({ id, fixedDepth }) => {
+const NodeGraph = ({ id, data, fixedDepth }) => {
   const [myNodes, setNodes] = useState([]);
   const [myLinks, setLinks] = useState([]);
+  const [root, setRoot] = useState(idifyTree({}));
   const width = useAvailableWidth(`#${id}`);
   const [sourcePosition, setSourcePosition] = useState({});
 
   const height = 800;
+
+  useEffect(() => {
+    const root = idifyTree(data);
+    fullyCollapseTreeOrNodes(root.children);
+    setRoot(root);
+  }, [data]);
+
+  useEffect(() => {
+    update(root);
+  }, [width]);
+
+  const handleNodeClick = (self) => {
+    toggleChildren(self);
+    update(self);
+  };
 
   const update = (source) => {
     const tree = d3.layout.tree().size([width, height]);
@@ -55,20 +68,6 @@ const NodeGraph = ({ id, fixedDepth }) => {
     setNodes(nodes);
   };
 
-  const handleNodeClick = (self) => {
-    toggleChildren(self);
-    update(self);
-  };
-
-  useEffect(() => {
-    update(root);
-  }, [width]);
-
-  useEffect(() => {
-    fullyCollapseTreeOrNodes(root.children);
-    update(root);
-  }, [root]);
-
   return (
     <Tree
       id={id}
@@ -84,6 +83,10 @@ const NodeGraph = ({ id, fixedDepth }) => {
 
 NodeGraph.propTypes = {
   id: PropTypes.string.isRequired,
+  data: PropTypes.shape({
+    name: PropTypes.string,
+    children: PropTypes.array,
+  }),
   fixedDepth: PropTypes.number,
 };
 
