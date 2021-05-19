@@ -4,7 +4,7 @@ import d3 from "d3";
 import data from "../../data/flare-2.json";
 import Tree from "./Tree";
 import { idifyTree } from "../../utils/treeStructures";
-import { useAvailableWidth } from "./useWindowSize";
+import { useAvailableWidth } from "./useAvailableWidth";
 
 const toggleChildren = (self) => {
   if (self.children) {
