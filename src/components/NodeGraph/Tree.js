@@ -54,7 +54,7 @@ const Tree = ({
 };
 
 Tree.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
   width: PropTypes.number,
   height: PropTypes.number,
   nodes: PropTypes.array,
@@ -67,7 +67,6 @@ Tree.propTypes = {
 };
 
 Tree.defaultProps = {
-  id: "node-graph-svg",
   width: 0,
   height: 0,
   nodes: [],

@@ -29,10 +29,10 @@ const fullyCollapseTreeOrNodes = (d) =>
 
 const root = idifyTree(data);
 
-const NodeGraph = ({ fixedDepth }) => {
+const NodeGraph = ({ id, fixedDepth }) => {
   const [myNodes, setNodes] = useState([]);
   const [myLinks, setLinks] = useState([]);
-  const width = useAvailableWidth("#node-graph-svg");
+  const width = useAvailableWidth(`#${id}`);
   const [sourcePosition, setSourcePosition] = useState({});
 
   const height = 800;
@@ -71,6 +71,7 @@ const NodeGraph = ({ fixedDepth }) => {
 
   return (
     <Tree
+      id={id}
       width={width}
       height={height}
       nodes={myNodes}
@@ -82,14 +83,12 @@ const NodeGraph = ({ fixedDepth }) => {
 };
 
 NodeGraph.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
+  id: PropTypes.string.isRequired,
   fixedDepth: PropTypes.number,
 };
 
 NodeGraph.defaultProps = {
-  width: 960,
-  height: 800,
+  id: "node-graph-svg",
   fixedDepth: 200,
 };
 

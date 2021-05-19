@@ -21,7 +21,7 @@ const App = () => {
         </div>
       </header>
       <main>
-        <NodeGraph />
+        <NodeGraph id="node-graph-svg" />
       </main>
     </div>
   );
