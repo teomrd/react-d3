@@ -2,18 +2,13 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import d3 from "d3";
 import Tree from "./Tree";
-import { idifyTree } from "../../utils/treeStructures";
+import {
+  toggleNodeChildren,
+  idifyTree,
+  traverse,
+} from "../../utils/treeStructures";
 import { useAvailableWidth } from "./useAvailableWidth";
 
-const toggleChildren = (self) => {
-  if (self.children) {
-    self._children = self.children;
-    self.children = null;
-  } else {
-    self.children = self._children;
-    self._children = null;
-  }
-};
 const collapseChildrenToTheEnd = (d) => {
   if (d.children) {
     d._children = d.children;
@@ -41,34 +36,36 @@ const NodeGraph = ({ id, data, fixedDepth, nodeSize, transitionDuration }) => {
   }, [data]);
 
   useEffect(() => {
-    update(root);
-  }, [width]);
+    const update = () => {
+      const tree = d3.layout.tree().size([width, height]);
+      const nodes = tree.nodes(root).reverse();
+      const treeDepth = nodes.reduce(
+        (acc, { depth }) => (depth > acc ? depth : acc),
+        1
+      );
+      const links = tree.links(nodes);
 
-  const handleNodeClick = (self) => {
-    toggleChildren(self);
-    setSourcePosition({
-      x: self.x,
-      y: self.y,
-    });
+      nodes.forEach((d) => {
+        d.y = d.depth * fixedDepth;
+      });
+
+      setHeight(treeDepth * fixedDepth + nodeSize * 3);
+      setLinks(links);
+      setNodes(nodes);
+    };
     update();
-  };
+  }, [width, height, root, fixedDepth, nodeSize]);
 
-  const update = () => {
-    const tree = d3.layout.tree().size([width, height]);
-    const nodes = tree.nodes(root).reverse();
-    const treeDepth = nodes.reduce(
-      (acc, { depth }) => (depth > acc ? depth : acc),
-      1
-    );
-    const links = tree.links(nodes);
+  const handleNodeClick = ({ id, x, y }) => {
+    const toggleIfNodeWithId = (id) => (node) =>
+      node.id === id ? toggleNodeChildren(node) : node;
 
-    nodes.forEach((d) => {
-      d.y = d.depth * fixedDepth;
+    const updatedRoot = traverse(root, toggleIfNodeWithId(id));
+    setRoot(updatedRoot);
+    setSourcePosition({
+      x: x,
+      y: y,
     });
-
-    setHeight(treeDepth * fixedDepth + nodeSize * 3);
-    setLinks(links);
-    setNodes(nodes);
   };
 
   return (

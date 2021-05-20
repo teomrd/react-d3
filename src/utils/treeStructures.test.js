@@ -230,5 +230,84 @@ describe("tree structure", () => {
 
       expect(actual).toEqual(tree);
     });
+
+    it("should change accordingly only the node required and leave the rest of the nodes intact", () => {
+      const tree = {
+        name: "root",
+        children: [
+          {
+            name: "foo",
+            children: [
+              {
+                name: "foo-foo",
+              },
+              {
+                name: "foo-bar",
+              },
+            ],
+          },
+          {
+            name: "bar",
+            children: [
+              {
+                name: "bar-foo",
+                children: [
+                  {
+                    name: "bar-foo-1",
+                  },
+                  {
+                    name: "bar-bar-1",
+                  },
+                ],
+              },
+              {
+                name: "bar-bar",
+              },
+            ],
+          },
+        ],
+      };
+      const predicate = (node) => node.name === "root";
+      const idifyNodeIf = (node) =>
+        predicate(node) === true ? idifyNode(node) : node;
+      const actual = traverse(tree, idifyNodeIf);
+
+      expect(actual).toEqual({
+        name: "root",
+        id: "some-id",
+        children: [
+          {
+            name: "foo",
+            children: [
+              {
+                name: "foo-foo",
+              },
+              {
+                name: "foo-bar",
+              },
+            ],
+          },
+          {
+            name: "bar",
+            children: [
+              {
+                name: "bar-foo",
+                children: [
+                  {
+                    name: "bar-foo-1",
+                  },
+                  {
+                    name: "bar-bar-1",
+                  },
+                ],
+              },
+              {
+                name: "bar-bar",
+              },
+            ],
+          },
+        ],
+      });
+    });
   });
 });
