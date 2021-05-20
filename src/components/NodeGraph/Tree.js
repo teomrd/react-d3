@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Node from "./Node";
 import Link from "./Link";
 import "./style.css";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Tree = ({
   nodes,
@@ -13,9 +13,14 @@ const Tree = ({
   onNodeClick,
   sourcePosition,
   id,
+  transitionDuration,
 }) => {
   return (
-    <svg width={width} height={height} id={id}>
+    <motion.svg
+      id={id}
+      animate={{ width, height }}
+      transition={{ duration: transitionDuration }}
+    >
       <g transform="translate(0, 50)">
         <AnimatePresence>
           {links.map(({ source, target }) => (
@@ -24,6 +29,7 @@ const Tree = ({
               source={source}
               target={target}
               sourcePosition={sourcePosition}
+              duration={transitionDuration}
             />
           ))}
         </AnimatePresence>
@@ -44,12 +50,13 @@ const Tree = ({
                 isClickable={isParent}
                 color={_children ? "rgb(176, 196, 222)" : "#fff"}
                 onNodeClick={() => onNodeClick(node)}
+                duration={transitionDuration}
               />
             );
           })}
         </AnimatePresence>
       </g>
-    </svg>
+    </motion.svg>
   );
 };
 
@@ -64,6 +71,7 @@ Tree.propTypes = {
     x: PropTypes.number,
     y: PropTypes.number,
   }).isRequired,
+  transitionDuration: PropTypes.number,
 };
 
 Tree.defaultProps = {
@@ -71,6 +79,7 @@ Tree.defaultProps = {
   height: 0,
   nodes: [],
   links: [],
+  transitionDuration: 0.75,
 };
 
 export default Tree;

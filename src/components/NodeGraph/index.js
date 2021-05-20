@@ -26,7 +26,7 @@ const fullyCollapseTreeOrNodes = (d) =>
     ? d.forEach(collapseChildrenToTheEnd)
     : collapseChildrenToTheEnd(d);
 
-const NodeGraph = ({ id, data, fixedDepth }) => {
+const NodeGraph = ({ id, data, fixedDepth, nodeSize, transitionDuration }) => {
   const [myNodes, setNodes] = useState([]);
   const [myLinks, setLinks] = useState([]);
   const [root, setRoot] = useState(idifyTree({}));
@@ -54,21 +54,19 @@ const NodeGraph = ({ id, data, fixedDepth }) => {
   };
 
   const update = () => {
-    const currentDepth = myNodes.reduce(
-      (acc, { depth }) => (depth > acc ? depth : acc),
-      0
-    );
-
-    setHeight((currentDepth + 1) * fixedDepth + fixedDepth);
-
     const tree = d3.layout.tree().size([width, height]);
     const nodes = tree.nodes(root).reverse();
+    const treeDepth = nodes.reduce(
+      (acc, { depth }) => (depth > acc ? depth : acc),
+      1
+    );
     const links = tree.links(nodes);
 
     nodes.forEach((d) => {
       d.y = d.depth * fixedDepth;
     });
 
+    setHeight(treeDepth * fixedDepth + nodeSize * 3);
     setLinks(links);
     setNodes(nodes);
   };
@@ -82,6 +80,7 @@ const NodeGraph = ({ id, data, fixedDepth }) => {
       links={myLinks}
       sourcePosition={sourcePosition}
       onNodeClick={handleNodeClick}
+      transitionDuration={transitionDuration}
     />
   );
 };
@@ -93,11 +92,15 @@ NodeGraph.propTypes = {
     children: PropTypes.array,
   }),
   fixedDepth: PropTypes.number,
+  nodeSize: PropTypes.number,
+  transitionDuration: PropTypes.number,
 };
 
 NodeGraph.defaultProps = {
   id: "node-graph-svg",
   fixedDepth: 180,
+  nodeSize: 30,
+  transitionDuration: 0.75,
 };
 
 export default NodeGraph;
