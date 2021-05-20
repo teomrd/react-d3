@@ -1,20 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
-import d3 from "d3";
+import * as d3 from "d3-shape";
 import { motion } from "framer-motion";
 
-const diagonal = d3.svg.diagonal().projection((d) => [d.x, d.y]);
-
-const getDiagonal = (source, target) => diagonal({ source, target });
+const diagonal = d3
+  .linkVertical()
+  .x((d) => d.x)
+  .y((d) => d.y);
 
 const Link = ({ source, target, sourcePosition, duration }) => {
   const { x: sx = source.x, y: sy = source.y } = sourcePosition || {};
   const o = { x: sx, y: sy };
   return (
     <motion.path
-      initial={{ d: getDiagonal(o, o), opacity: 0 }}
-      animate={{ d: getDiagonal(source, target), opacity: 1 }}
-      exit={{ d: getDiagonal(source, source), opacity: 0 }}
+      initial={{ d: diagonal({ source: o, target: o }), opacity: 0 }}
+      animate={{ d: diagonal({ source, target }), opacity: 1 }}
+      exit={{ d: diagonal({ source: o, target: o }), opacity: 0 }}
       transition={{ duration }}
       className="link"
     ></motion.path>

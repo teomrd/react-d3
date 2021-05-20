@@ -1,67 +1,91 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import d3 from "d3";
+import * as d3 from "d3-hierarchy";
 import Tree from "./Tree";
 import {
-  toggleNodeChildren,
   idifyTree,
+  toggleNodeChildren,
   traverse,
 } from "../../utils/treeStructures";
 import { useAvailableWidth } from "./useAvailableWidth";
 
-const collapseChildrenToTheEnd = (d) => {
-  if (d.children) {
-    d._children = d.children;
-    d._children.forEach(collapseChildrenToTheEnd);
-    d.children = null;
-  }
+const buildTree = (data, w, fixedDepth = 180) => {
+  const dataWithIds = idifyTree(data);
+  const root = d3.hierarchy(dataWithIds);
+  const height = root.height * fixedDepth;
+  return {
+    root: d3.tree().size([w, height])(root),
+    height,
+  };
 };
-const fullyCollapseTreeOrNodes = (d) =>
-  Array.isArray(d)
-    ? d.forEach(collapseChildrenToTheEnd)
-    : collapseChildrenToTheEnd(d);
 
-const NodeGraph = ({ id, data, fixedDepth, nodeSize, transitionDuration }) => {
+const getNode = ({ data, x, y, height, depth, parent }) => ({
+  id: data.id,
+  name: data.name,
+  hasChildren: !!(data.children || data._children),
+  hasUnfoldChildren: !!data._children,
+  x,
+  y,
+  height,
+  depth,
+  ...(parent ? { parent: getNode(parent) } : {}),
+});
+
+const getNodes = (root) => {
+  const descendants = root.descendants();
+  const nodes = descendants.map((d) => getNode(d));
+
+  return nodes;
+};
+
+const getLinks = (root) => {
+  const links = root.links();
+  return links.map(({ source, target }) => ({
+    source: getNode(source),
+    target: getNode(target),
+  }));
+};
+
+const NodeGraph = ({ id, data, nodeSize, transitionDuration, fixedDepth }) => {
+  const [myData, setData] = useState({});
   const [myNodes, setNodes] = useState([]);
   const [myLinks, setLinks] = useState([]);
-  const [root, setRoot] = useState(idifyTree({}));
   const width = useAvailableWidth(`#${id}`);
   const [height, setHeight] = useState(0);
   const [sourcePosition, setSourcePosition] = useState({});
 
   useEffect(() => {
-    const root = idifyTree(data);
-    fullyCollapseTreeOrNodes(root.children);
-    setRoot(root);
+    const dataWithIds = idifyTree(data);
+    const { id: rootNodeId } = dataWithIds;
+
+    const toggleDeepNodes = (node) =>
+      node.id !== rootNodeId ? toggleNodeChildren(node) : node;
+
+    const foldedTree = traverse(dataWithIds, toggleDeepNodes);
+    return setData(foldedTree);
   }, [data]);
 
   useEffect(() => {
     const update = () => {
-      const tree = d3.layout.tree().size([width, height]);
-      const nodes = tree.nodes(root).reverse();
-      const treeDepth = nodes.reduce(
-        (acc, { depth }) => (depth > acc ? depth : acc),
-        1
-      );
-      const links = tree.links(nodes);
+      const { root, height } = buildTree(myData, width, fixedDepth);
 
-      nodes.forEach((d) => {
-        d.y = d.depth * fixedDepth;
-      });
+      const nodes = getNodes(root);
+      const links = getLinks(root);
 
-      setHeight(treeDepth * fixedDepth + nodeSize * 3);
-      setLinks(links);
+      setHeight(height);
       setNodes(nodes);
+      setLinks(links);
     };
     update();
-  }, [width, height, root, fixedDepth, nodeSize]);
+  }, [myData, width, fixedDepth]);
 
   const handleNodeClick = ({ id, x, y }) => {
     const toggleIfNodeWithId = (id) => (node) =>
       node.id === id ? toggleNodeChildren(node) : node;
 
-    const updatedRoot = traverse(root, toggleIfNodeWithId(id));
-    setRoot(updatedRoot);
+    const updatedData = traverse(myData, toggleIfNodeWithId(id));
+    setData(updatedData);
+
     setSourcePosition({
       x: x,
       y: y,
@@ -73,6 +97,7 @@ const NodeGraph = ({ id, data, fixedDepth, nodeSize, transitionDuration }) => {
       id={id}
       width={width}
       height={height}
+      nodeSize={nodeSize}
       nodes={myNodes}
       links={myLinks}
       sourcePosition={sourcePosition}

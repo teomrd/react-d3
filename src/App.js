@@ -22,12 +22,7 @@ const App = () => {
         </div>
       </header>
       <main>
-        <NodeGraph
-          id="node-graph-svg"
-          data={data}
-          nodeSize={30}
-          transitionDuration={0.75}
-        />
+        <NodeGraph id="node-graph-svg" data={data} nodeSize={50} />
       </main>
     </div>
   );

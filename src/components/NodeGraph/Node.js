@@ -6,7 +6,7 @@ const Node = ({
   position,
   enterPosition,
   exitPosition,
-  r,
+  nodeSize,
   color,
   text,
   onNodeClick,
@@ -16,7 +16,7 @@ const Node = ({
   const { x, y } = position;
   const { x: ix = x, y: iy = y } = enterPosition;
   const { x: ox = x, y: oy = y } = exitPosition;
-
+  const r = nodeSize / 2;
   return (
     <motion.g
       className={`node ${isClickable ? "clickable" : ""}`}
@@ -47,7 +47,7 @@ Node.propTypes = {
     x: PropTypes.number,
     y: PropTypes.number,
   }).isRequired,
-  r: PropTypes.number,
+  nodeSize: PropTypes.number,
   duration: PropTypes.number,
   color: PropTypes.string,
   text: PropTypes.string,
@@ -62,7 +62,7 @@ Node.defaultProps = {
   },
   enterPosition: {},
   exitPosition: {},
-  r: 30,
+  nodeSize: 60,
   duration: 0.75,
   color: "#fff",
   text: "",

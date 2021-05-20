@@ -14,14 +14,15 @@ const Tree = ({
   sourcePosition,
   id,
   transitionDuration,
+  nodeSize,
 }) => {
   return (
     <motion.svg
       id={id}
-      animate={{ width, height }}
+      animate={{ width, height: height + nodeSize * 2 }}
       transition={{ duration: transitionDuration }}
     >
-      <g transform="translate(0, 50)">
+      <g transform={`translate(0, ${nodeSize / 2 + 20})`}>
         <AnimatePresence>
           {links.map(({ source, target }) => (
             <Link
@@ -35,8 +36,8 @@ const Tree = ({
         </AnimatePresence>
         <AnimatePresence>
           {nodes.map((node) => {
-            const { id, x, y, name, _children, children, parent } = node;
-            const isParent = !!(_children || children);
+            const { id, name, hasChildren, hasUnfoldChildren, x, y, parent } =
+              node;
             return (
               <Node
                 key={id}
@@ -47,10 +48,11 @@ const Tree = ({
                 enterPosition={sourcePosition}
                 exitPosition={parent}
                 text={name}
-                isClickable={isParent}
-                color={_children ? "rgb(176, 196, 222)" : "#fff"}
+                isClickable={hasChildren}
+                color={hasUnfoldChildren ? "rgb(176, 196, 222)" : "#fff"}
                 onNodeClick={() => onNodeClick(node)}
                 duration={transitionDuration}
+                nodeSize={nodeSize}
               />
             );
           })}
@@ -72,6 +74,7 @@ Tree.propTypes = {
     y: PropTypes.number,
   }).isRequired,
   transitionDuration: PropTypes.number,
+  nodeSize: PropTypes.number,
 };
 
 Tree.defaultProps = {

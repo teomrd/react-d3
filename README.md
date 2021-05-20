@@ -12,7 +12,7 @@ frame-motion proved to be great for managing the animation part
 ## Tools
 
 * React: 17
-* D3: 3.5
+* D3: 6 (_Actually using the latest versions of d3-hierarchy & d3-shape_)
 * framer-motion: 4.1
 * vercel
 
