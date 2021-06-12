@@ -12,6 +12,9 @@ const Node = ({
   onNodeClick,
   isClickable,
   duration,
+  dragConstraints,
+  onDragEnd,
+  isDraggable,
 }) => {
   const { x, y } = position;
   const { x: ix = x, y: iy = y } = enterPosition;
@@ -19,6 +22,9 @@ const Node = ({
   const r = nodeSize / 2;
   return (
     <motion.g
+      drag={isDraggable}
+      dragConstraints={dragConstraints}
+      onDragEnd={onDragEnd}
       className={`node ${isClickable ? "clickable" : ""}`}
       onClick={onNodeClick}
       initial={{ x: ix, y: iy, scale: 0 }}
@@ -53,6 +59,9 @@ Node.propTypes = {
   text: PropTypes.string,
   onNodeClick: PropTypes.func.isRequired,
   isClickable: PropTypes.bool,
+  isDraggable: PropTypes.bool,
+  onDragEnd: PropTypes.func,
+  dragConstraints: PropTypes.object,
 };
 
 Node.defaultProps = {
@@ -67,6 +76,7 @@ Node.defaultProps = {
   color: "#fff",
   text: "",
   isClickable: false,
+  isDraggable: false,
 };
 
 export default Node;
