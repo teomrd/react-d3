@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAvailableWidth } from "../NodeGraph/useAvailableWidth";
+import Node from "../NodeGraph/Node";
 
 const playgroundContainerSvgId = "playground-svg";
 
@@ -24,7 +25,15 @@ const Playground = () => {
     <div>
       <svg id="playground-svg" width={width} height="800" onClick={handleClick}>
         {nodes.map((node, i) => (
-          <circle key={i} cx={node.x} cy={node.y} r="10" fill="red" />
+          <Node
+            key={i}
+            position={{
+              x: node.x,
+              y: node.y,
+            }}
+            nodeSize={30}
+            duration={0.25}
+          />
         ))}
       </svg>
     </div>
