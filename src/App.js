@@ -1,20 +1,17 @@
 import React from "react";
 import NodeGraph from "./components/NodeGraph/index";
+import "./index.css";
 import "./App.css";
 import SmoothySubText from "./components/SmoothySubText";
 import data from "./data/flare.json";
+import Nav from "./components/Nav";
 
 const App = () => {
   return (
     <div className="App">
       <header style={{ marginBottom: "20px" }}>
-        <h1
-          style={{
-            marginBottom: "5px",
-          }}
-        >
-          React + D3
-        </h1>
+        <Nav />
+        <h1>React + D3</h1>
         <div>
           <SmoothySubText>
             <i>are friends </i> 😈
