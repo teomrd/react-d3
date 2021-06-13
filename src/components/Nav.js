@@ -15,7 +15,7 @@ const classNames = (...classes) => {
 const Nav = () => {
   const location = useLocation();
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="bg-dark border-b border-pink-800">
       {({ open }) => (
         <>
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">

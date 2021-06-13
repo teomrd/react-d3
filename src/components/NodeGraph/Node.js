@@ -14,7 +14,12 @@ const Node = ({
   duration,
   dragConstraints,
   onDragEnd,
+  onDragStart,
+  onMouseDown,
+  onMouseUp,
   isDraggable,
+  ringColor,
+  ringSize,
 }) => {
   const { x, y } = position;
   const { x: ix = x, y: iy = y } = enterPosition;
@@ -25,14 +30,25 @@ const Node = ({
       drag={isDraggable}
       dragConstraints={dragConstraints}
       onDragEnd={onDragEnd}
+      onDragStart={onDragStart}
       className={`node ${isClickable ? "clickable" : ""}`}
       onClick={onNodeClick}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
       initial={{ x: ix, y: iy, scale: 0 }}
       animate={{ x, y, scale: 1 }}
       exit={{ x: ox, y: oy, scale: 0 }}
       transition={{ duration }}
     >
-      <circle r={r} style={{ fill: color }}></circle>
+      <motion.circle
+        animate={{ r: r }}
+        style={{
+          fill: color,
+          cursor: isDraggable ? "grab" : "pointer",
+          stroke: ringColor,
+          strokeWidth: ringSize,
+        }}
+      ></motion.circle>
       <text x="0" dy={-r - 5} textAnchor="middle" style={{ fillOpacity: 1 }}>
         {text}
       </text>
@@ -58,10 +74,15 @@ Node.propTypes = {
   color: PropTypes.string,
   text: PropTypes.string,
   onNodeClick: PropTypes.func.isRequired,
+  onMouseUp: PropTypes.func,
+  onMouseDown: PropTypes.func,
   isClickable: PropTypes.bool,
   isDraggable: PropTypes.bool,
   onDragEnd: PropTypes.func,
+  onDragStart: PropTypes.func,
   dragConstraints: PropTypes.object,
+  ringColor: PropTypes.string,
+  ringSize: PropTypes.string,
 };
 
 Node.defaultProps = {
@@ -74,6 +95,8 @@ Node.defaultProps = {
   nodeSize: 60,
   duration: 0.75,
   color: "#fff",
+  ringColor: "rgba(0,0,0,0.5)",
+  ringSize: "1px",
   text: "",
   isClickable: false,
   isDraggable: false,
